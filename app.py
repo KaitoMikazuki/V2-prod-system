@@ -1,3 +1,7 @@
+# Features to consider:
+# Streaks
+# Custom Task points
+
 from flask import Flask, redirect, render_template, request, jsonify, g
 from datetime import datetime
 import sqlite3
