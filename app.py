@@ -43,5 +43,20 @@ def close_connection(exception):
 
 @app.route("/")
 def index():
-    cur = get_db().cursor()
     return render_template("index.html")
+
+@app.route("/statistics")
+def function ():
+    return ""
+
+@app.route("/history")
+def function2 ():
+    return ""
+
+@app.route("/purchase")
+def function3 ():
+    return ""
+
+@app.route("/settings")
+def function4 ():
+    return ""
