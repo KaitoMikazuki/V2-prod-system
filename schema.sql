@@ -31,6 +31,7 @@ CREATE TABLE items (
 )
 
 CREATE TABLE purchases (
+    id INTEGER PRIMARY KEY,
     purchase TEXT,
     logged_at TEXT DEFAULT(datetime('now')),
     price INTEGER
