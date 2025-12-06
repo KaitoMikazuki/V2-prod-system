@@ -1,3 +1,66 @@
+:root{
+    --primary-c:#171616;
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color:white;
+}
+
+ul {
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+}
+
+body{
+    background: radial-gradient(circle at center, #2A2A2A 0%, var(--primary-c) 70% );
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* optional: keeps gradient static while scrolling */
+    background-size: cover;   
+    /* background-repeat: none; */
+}
+
+.header-nav{
+    display: flex;
+    align-items: center;
+    padding:3vh 5vw;
+    margin: 2vh;
+    gap: 10vw;
+    font-size: 1.5rem;
+    position: sticky;
+}
+
+.header-nav>ul:nth-child(1) {
+    margin-right: auto;
+    letter-spacing:8px;
+    font-size: 2rem;
+    transition: opacity 0.5s;
+}
+
+.header-nav>ul:nth-child(1):hover{
+    transition: 0.5s;
+    opacity: 0.2;
+}
+
+.header-nav a{
+    padding: 8px;
+    transition: font-size 1s; 
+    color:lightgray;
+    text-shadow: white 0 0 24px;
+}
+
+.header-nav a:hover{
+    transition: 1s;
+    font-size: 2rem;
+}
+
+
+
 .u-hidden{
     display: none;
 }
