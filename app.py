@@ -45,6 +45,22 @@ def close_connection(exception):
 def index():
     return render_template("index.html")
 
+@app.route("/shallow")
+def add_shallow():
+    return ""
+
+@app.route("/deep")
+def add_deep():
+    return ""
+
+@app.route("/tdl")
+def add_tdl():
+    return ""
+
+@app.route("/fetch_labels")
+def fetch_labels():
+    return ""
+
 @app.route("/statistics")
 def function ():
     return ""
