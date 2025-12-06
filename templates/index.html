@@ -2,6 +2,44 @@
 {% block title %}Productivity Tracker{% endblock %}
 
 {% block content %}
+<main>
+    <form action="" id="shallow" method="post">
+        <h2>Shallow Focus</h2>
+
+        <label for="minutes" class="u-hidden">Minutes</label>
+        <input type="number" name="minutes" id="minutes" placeholder="minutes" required>
+        <label for="seconds" class="u-hidden">Seconds</label>
+        <input type="number" name="seconds" id="seconds" placeholder="seconds">
+        
+        <label for="label">Label</label>
+        <select name="label" id="label">
+            <option value="" selected disabled>Select a label</option>
+        </select>
+        
+        <label for="notes">Notes</label>
+        <input type="text" name="notes" id="notes">
+    </form>
+    <form action="" id="deep" method="post">
+        <h2>Deep Focus</h2>
+
+        <label for="minutes" class="u-hidden">Minutes</label>
+        <input type="number" name="minutes" id="minutes" placeholder="minutes" required>
+
+        <label for="seconds" class="u-hidden">Seconds</label>
+        <input type="number" name="seconds" id="seconds" placeholder="seconds">
+        
+        <label for="label">Label</label>
+        <select name="label" id="label">
+            <option value="" selected disabled>Select a label</option>
+        </select>
+        <label for="notes">Notes</label>
+        <input type="text" name="notes" id="notes">
 
 
+    </form>
+    <section id="tdl">
+
+    </section>
+</main>
+<script src="../static/index.js"></script>
 {% endblock %}
