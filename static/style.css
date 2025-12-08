@@ -130,10 +130,12 @@ body{
 }
 
 .focus-form-submit{
+    margin-top: 3rem;
+    width: 40%;
+}
+.primary-btn{
     justify-self: center;
     padding: 0.7rem;
-    width: 40%;
-    margin-top: 3rem;
     border-radius: 16px;
     border:none;
     background-color: var(--primary-c);
@@ -142,7 +144,7 @@ body{
     font-size: 1.25rem;
 }
 
-.focus-form-submit:hover{
+.primary-btn:hover{
     transition: 0.5s;
     opacity: 0.4;
     cursor: pointer;
@@ -156,11 +158,32 @@ body{
     min-width: 400px;
 }
 
+
+
+
+.tdl-section{
+    margin-top: 64px;
+    width: 100%;
+    padding: 64px;
+
+    grid-column: 1 / -1;
+    font-family: Helvetica;
+    box-shadow: black 0 0 32px;
+    display: grid;
+    justify-items: center;
+    gap: 0.25rem;
+}
+
+.tdl-section h2{
+    font-size: 3rem;
+}
+
+.tdl-section button{
+    margin-top: 20px;
+}
+
+
 /* utility classes */
 .u-hidden{
     display: none;
-}
-
-.u-mt{
-    margin-top: 1rem;
 }
