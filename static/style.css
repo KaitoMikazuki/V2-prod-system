@@ -1,12 +1,32 @@
 :root{
-    --primary-c:#171616;
+    --primary-c:#171616; 
+    --secondary-c: #2a2a2a;
 }
 
 *{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    color:white;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Safari reset */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Removes input[type="number"] spinner controls */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 ul {
@@ -23,16 +43,20 @@ body{
     background-attachment: fixed; /* optional: keeps gradient static while scrolling */
     background-size: cover;   
     /* background-repeat: none; */
+    font-family: Georgia, 'Times New Roman', Times, serif; 
+    color:white;
 }
 
 .header-nav{
     display: flex;
     align-items: center;
     padding:3vh 5vw;
-    margin: 2vh;
+    margin: 2vh 0;
     gap: 10vw;
     font-size: 1.5rem;
     position: sticky;
+    font-family: "Helvetica";
+    margin-bottom: 64px;
 }
 
 .header-nav>ul:nth-child(1) {
@@ -59,8 +83,84 @@ body{
     font-size: 2rem;
 }
 
+.index-main{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    justify-items: center;
+    align-items:center;
+}
 
 
+
+.focus-form{
+    width: min-content;
+    display: grid;
+    gap: 0.5rem;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: white 0px 0px 30px;
+}
+
+.focus-form h2 {
+    font-size: 3rem;
+    display: flex;
+    font-family: Helvetica;
+}
+
+.focus-form hr{
+    margin: 1rem 0;
+}
+
+.focus-form input,
+.focus-form select{
+    color: white;
+    appearance: none;
+    box-shadow: black 4px 4px 6px;
+    border: none;
+    height: 3rem;
+    padding: 0 1rem;
+    border-radius: 10px;
+    background: var(--secondary-c);
+}
+
+
+.focus-form label{
+    font-size: 1.25rem;
+}
+
+.focus-form-submit{
+    justify-self: center;
+    padding: 0.7rem;
+    width: 40%;
+    margin-top: 3rem;
+    border-radius: 16px;
+    border:none;
+    background-color: var(--primary-c);
+    box-shadow: 0 0 16px white;
+    color:white;
+    font-size: 1.25rem;
+}
+
+.focus-form-submit:hover{
+    transition: 0.5s;
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+.focus-div{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    align-items: center;
+    min-width: 400px;
+}
+
+/* utility classes */
 .u-hidden{
     display: none;
+}
+
+.u-mt{
+    margin-top: 1rem;
 }
