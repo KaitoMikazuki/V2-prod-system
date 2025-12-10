@@ -17,7 +17,7 @@ def validate_form_data(data=dict):
         seconds = int(data['seconds'])
     except ValueError:
         return False
-    if minutes < 0:
+    if minutes < 1:
         return False
     if seconds < 0: 
         return False
