@@ -13,9 +13,6 @@ CREATE TABLE state (
     deep_value REAL DEFAULT 1,
     shallow_value REAL DEFAULT 1,
     tdl_value REAL DEFAULT 1
-    mode TEXT 
-        DEFAULT 'game'
-        CHECK(mode IN ('game', 'track'))
 );
 
 CREATE TABLE logs (
