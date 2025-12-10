@@ -6,10 +6,10 @@ DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS purchases;
 
 CREATE TABLE state (
-    current__points REAL,
+    current__points REAL DEFAULT 0,
     total_points REAL DEFAULT 0,
-    total_deep INTEGER,
-    total_shallow INTEGER,
+    total_deep INTEGER DEFAULT 0,
+    total_shallow INTEGER DEFAULT 0,
     deep_value REAL DEFAULT 1,
     shallow_value REAL DEFAULT 1,
     tdl_value REAL DEFAULT 1
