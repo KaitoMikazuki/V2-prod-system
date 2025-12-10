@@ -11,6 +11,7 @@
 from flask import Flask, redirect, render_template, request, jsonify, g
 from datetime import datetime
 import sqlite3
+from helpers import validate_form_data 
 
 app = Flask(__name__)
 # ===== AUTO-REFRESH CONFIG (START - REMOVE THIS SECTION) =====
@@ -18,8 +19,9 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['ENV'] = 'development'
 # ===== AUTO-REFRESH CONFIG (END) =====
 
-
-DATABASE = './productivity.db'
+personal_db = './productivity.db'
+debug_db = './debug.db'
+DATABASE = debug_db
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -50,10 +52,6 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-# Below is the actual app 
-
-from helpers import validate_form_data 
- # KEEP BELOW TO AVOID CIRCULAR IMPORTS
 
 @app.route("/")
 def index():
