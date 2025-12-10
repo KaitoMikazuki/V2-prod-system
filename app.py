@@ -11,7 +11,7 @@
 from flask import Flask, redirect, render_template, request, jsonify, g
 from datetime import datetime
 import sqlite3
-from helpers import validate_form_data 
+from helpers import validate_form_data, now
 
 app = Flask(__name__)
 # ===== AUTO-REFRESH CONFIG (START - REMOVE THIS SECTION) =====
@@ -63,9 +63,8 @@ def add_shallow():
     data = request.form.to_dict()
     data = validate_form_data(data) 
     if data != False:
-        query_db("INSERT INTO logs (work_type, minutes, seconds, label, notes) VALUES (?, ?, ?, ?, ?)", (work_type, data['minutes'], data['seconds'], data['label'], data['notes']))
+        query_db("INSERT INTO logs (work_type, minutes, seconds, logged_at, label, notes) VALUES (?, ?, ?, ?, ?, ?)", (work_type, data['minutes'], data['seconds'], now(), data['label'], data['notes']))
         get_db().commit()
-        print(query_db("SELECT * FROM logs"))
     return redirect("/")
 
 @app.route("/deep")

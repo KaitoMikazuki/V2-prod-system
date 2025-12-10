@@ -1,4 +1,5 @@
 from flask import request
+from datetime import datetime
 
 def validate_form_data(data=dict):
     if not isinstance(data, dict):
@@ -26,6 +27,8 @@ def validate_form_data(data=dict):
     
     return data
 
+def now():
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
 
 # sqlite3 queries
