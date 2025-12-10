@@ -42,9 +42,11 @@ def init_db():
             db = get_db()
             with app.open_resource('schema.sql', mode='r') as f:
                 db.cursor().executescript(f.read())
+            query_db("INSERT INTO state DEFAULT VALUES")
             db.commit()
     except sqlite3.Error as e:
         print(f"Database error: {e}")
+    # TODO: Initialize state table
 
 @app.teardown_appcontext
 def close_connection(exception):
@@ -59,20 +61,38 @@ def index():
 
 @app.route("/shallow", methods=['POST'])
 def add_shallow():
+    # TODO(PURCHASE&SETTINGS): Interact with state properly
+    # TODO: Accomodate points
     work_type = "shallow"
     data = request.form.to_dict()
     data = validate_form_data(data) 
     if data != False:
         query_db("INSERT INTO logs (work_type, minutes, seconds, logged_at, label, notes) VALUES (?, ?, ?, ?, ?, ?)", (work_type, data['minutes'], data['seconds'], now(), data['label'], data['notes']))
         get_db().commit()
+        # TODO: Tell user that the log operation was successful
+    # else: 
+        # TODO: RETURN ERROR - Warn user that input is wrong
     return redirect("/")
 
-@app.route("/deep")
+@app.route("/deep", methods=["POST"])
 def add_deep():
-    return ""
+    # TODO(PURCHASE&SETTINGS): Interact with state properly
+    # TODO: Accomodate points
+    work_type = "deep"
+    data = request.form.to_dict()
+    data = validate_form_data(data) 
+    if data != False:
+        query_db("INSERT INTO logs (work_type, minutes, seconds, logged_at, label, notes) VALUES (?, ?, ?, ?, ?, ?)", (work_type, data['minutes'], data['seconds'], now(), data['label'], data['notes']))
+        get_db().commit()
+        # TODO: Tell user that the log operation was successful
+    # else: 
+        # TODO: RETURN ERROR - Warn user that input is wrong
+    return redirect("/")
+
 
 @app.route("/tdl")
 def add_tdl():
+    # TODO: This involves JS to log the tdl 
     return ""
 
 @app.route("/fetch_labels")
