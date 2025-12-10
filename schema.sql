@@ -6,8 +6,13 @@ DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS purchases;
 
 CREATE TABLE state (
-    total_points REAL DEFAULT 0,
     current__points REAL,
+    total_points REAL DEFAULT 0,
+    total_deep INTEGER,
+    total_shallow INTEGER,
+    deep_value REAL DEFAULT 1,
+    shallow_value REAL DEFAULT 1,
+    tdl_value REAL DEFAULT 1
     mode TEXT 
         DEFAULT 'game'
         CHECK(mode IN ('game', 'track'))
@@ -16,9 +21,10 @@ CREATE TABLE state (
 CREATE TABLE logs (
     id INTEGER PRIMARY KEY,
     work_type TEXT CHECK(work_type IN('deep','shallow')),
-    minutes INTEGER CHECK(minutes > 0),
-    seconds INTEGER CHECK(seconds >= 0),
+    minutes INTEGER,
+    seconds INTEGER,
     logged_at TEXT DEFAULT(datetime('now')),
+    points REAL,
     label TEXT DEFAULT NULL,
     notes TEXT DEFAULT NULL
 );
