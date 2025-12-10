@@ -1,3 +1,10 @@
+-- FOR DEVELOPMENT ONLY
+DROP TABLE state;
+DROP TABLE logs;
+DROP TABLE labels;
+DROP TABLE items;
+DROP TABLE purchases;
+
 CREATE TABLE state (
     total_points REAL DEFAULT 0,
     current__points REAL,
@@ -9,14 +16,14 @@ CREATE TABLE state (
 CREATE TABLE logs (
     id INTEGER PRIMARY KEY,
     work_type TEXT CHECK(work_type IN('deep','shallow')),
-    minutes INTEGER,
-    seconds INTEGER CHECK(seconds >= 0 AND seconds <= 59),
+    minutes INTEGER CHECK(minutes >= 0),
+    seconds INTEGER CHECK(seconds >= 0),
     logged_at TEXT DEFAULT(datetime('now')),
     day INTEGER CHECK(day >= 1 AND day <= 31),
     month INTEGER CHECK(month >= 1 AND month <= 12),
     year INTEGER,
-    label TEXT DEFAULT "None",
-    notes TEXT DEFAULT "None"
+    label TEXT DEFAULT NULL,
+    notes TEXT DEFAULT NULL
 );
 
 CREATE TABLE labels (

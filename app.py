@@ -1,12 +1,23 @@
 # Features to consider:
 # Streaks
 # Custom Task points
+# Disappear once it reaches the nav 
+# Log reasons for failing to log a focus session
+
+# Bugs:
+# Safari linear gradient body bg
+# Dynamic sizing for the navbar and index
 
 from flask import Flask, redirect, render_template, request, jsonify, g
 from datetime import datetime
 import sqlite3
 
 app = Flask(__name__)
+# ===== AUTO-REFRESH CONFIG (START - REMOVE THIS SECTION) =====
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.config['ENV'] = 'development'
+# ===== AUTO-REFRESH CONFIG (END) =====
+
 
 DATABASE = './productivity.db'
 
@@ -39,15 +50,25 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-# Top part is all databse related, below is the actual app 
+# Below is the actual app 
+
+from helpers import validate_form_data 
+ # KEEP BELOW TO AVOID CIRCULAR IMPORTS
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/shallow")
+@app.route("/shallow", methods=['POST'])
 def add_shallow():
-    return ""
+    work_type = "shallow"
+    data = request.form.to_dict()
+    data = validate_form_data(data) 
+    if data != False:
+        query_db("INSERT INTO logs (work_type, minutes, seconds, label, notes) VALUES (?, ?, ?, ?, ?)", (work_type, data['minutes'], data['seconds'], data['label'], data['notes']))
+        get_db().commit()
+        print(query_db("SELECT * FROM logs"))
+    return redirect("/")
 
 @app.route("/deep")
 def add_deep():
@@ -76,3 +97,41 @@ def function3 ():
 @app.route("/settings")
 def function4 ():
     return ""
+
+
+# # ============================================================
+# # AUTO-REFRESH BROWSER - DELETE THIS ENTIRE SECTION BLOCK
+# # ============================================================
+# @app.after_request
+# def add_live_reload(response):
+#     """Injects a live reload script into HTML responses in development mode"""
+#     if app.debug and response.content_type and 'text/html' in response.content_type:
+#         live_reload_script = """
+#         <script>
+#         (function() {
+#             setInterval(function() {
+#                 fetch(window.location.href)
+#                     .then(r => r.text())
+#                     .then(html => {
+#                         if (html !== document.documentElement.outerHTML) {
+#                             location.reload();
+#                         }
+#                     })
+#                     .catch(e => {});
+#             }, 200000);
+#         })();
+#         </script>
+#         """
+#         if response.data:
+#             body = response.data.decode('utf-8')
+#             if '</body>' in body:
+#                 body = body.replace('</body>', live_reload_script + '</body>')
+#                 response.set_data(body)
+#     return response
+# # ============================================================
+# # END OF AUTO-REFRESH BROWSER SECTION
+# # ============================================================
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
