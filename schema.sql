@@ -9,7 +9,7 @@ CREATE TABLE state (
     current_points REAL DEFAULT 0,
     total_points REAL DEFAULT 0,
     total_deep INTEGER DEFAULT 0,
-    total_tdl INTEGER DEFAULT 0
+    total_tdl INTEGER DEFAULT 0,
     total_shallow INTEGER DEFAULT 0,
     deep_value REAL DEFAULT 1,
     shallow_value REAL DEFAULT 1,
