@@ -29,3 +29,16 @@ def init():
     except sqlite3.Error as e:
         print(f"Database error: {e}")
 
+# Helpers
+
+def get_pointval(work_type):
+    pointvals = query("SELECT deep_value, shallow_value, tdl_value FROM state", one=True)
+
+    match work_type:
+        case "shallow":
+            return pointvals["shallow_value"]
+        case "deep":
+            return pointvals["shallow_value"]
+        case "tdl":
+            return pointvals["tdl"]
+    return KeyError

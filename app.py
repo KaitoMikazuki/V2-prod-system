@@ -43,12 +43,14 @@ def index():
 @app.route("/shallow", methods=['POST'])
 def add_shallow():
     # TODO(PURCHASE&SETTINGS): Interact with state properly
-    # TODO: Accomodate points
-    work_type = "shallow"
     data = request.form.to_dict()
+    data["work_type"] = "shallow" #Don't modify
+    data["points"] = db.get_pointval(data["work_type"])
+    data['logged_at'] = now()
     data = validate_form_data(data) 
+    
     if data != False:
-        db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, label, notes) VALUES (?, ?, ?, ?, ?, ?)", (work_type, data['minutes'], data['seconds'], now(), data['label'], data['notes']))
+        db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, points, label, notes) VALUES (?, ?, ?, ?, ?, ?, ?)", (data["work_type"], data['minutes'], data['seconds'], data['logged_at'], data['points'], data['label'], data['notes']))
         db.get().commit()
         # TODO: Tell user that the log operation was successful
     # else: 
@@ -58,12 +60,13 @@ def add_shallow():
 @app.route("/deep", methods=["POST"])
 def add_deep():
     # TODO(PURCHASE&SETTINGS): Interact with state properly
-    # TODO: Accomodate points
-    work_type = "deep"
     data = request.form.to_dict()
+    data["work_type"] = "deep" #Don't modify
+    data["points"] = db.get_pointval(data["work_type"])
+    data['logged_at'] = now()
     data = validate_form_data(data) 
     if data != False:
-        db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, label, notes) VALUES (?, ?, ?, ?, ?, ?)", (work_type, data['minutes'], data['seconds'], now(), data['label'], data['notes']))
+        db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, points, label, notes) VALUES (?, ?, ?, ?, ?, ?, ?)", (data["work_type"], data['minutes'], data['seconds'], data['logged_at'], data['points'], data['label'], data['notes']))
         db.get().commit()
         # TODO: Tell user that the log operation was successful
     # else: 
