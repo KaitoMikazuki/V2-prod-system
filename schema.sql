@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS purchases;
 
 CREATE TABLE state (
-    current__points REAL DEFAULT 0,
+    current_points REAL DEFAULT 0,
     total_points REAL DEFAULT 0,
     total_deep INTEGER DEFAULT 0,
     total_tdl INTEGER DEFAULT 0
