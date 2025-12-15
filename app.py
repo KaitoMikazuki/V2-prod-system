@@ -10,7 +10,7 @@
 
 from flask import Flask, redirect, render_template, request, jsonify, g
 from datetime import datetime
-from helpers import validate_form_data, now
+from helpers import validate_form_data, now, calculate_pointval
 import db
 
 
@@ -45,12 +45,14 @@ def add_shallow():
     # TODO(PURCHASE&SETTINGS): Interact with state properly
     data = request.form.to_dict()
     data["work_type"] = "shallow" #Don't modify
-    data["points"] = db.get_pointval(data["work_type"])
     data['logged_at'] = now()
     data = validate_form_data(data) 
     
     if data != False:
+        data["points"] = calculate_pointval(data) #TODO: calc function
         db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, points, label, notes) VALUES (?, ?, ?, ?, ?, ?, ?)", (data["work_type"], data['minutes'], data['seconds'], data['logged_at'], data['points'], data['label'], data['notes']))
+        # TODO:
+        # db.update_state(data)
         db.get().commit()
         # TODO: Tell user that the log operation was successful
     # else: 
@@ -62,11 +64,13 @@ def add_deep():
     # TODO(PURCHASE&SETTINGS): Interact with state properly
     data = request.form.to_dict()
     data["work_type"] = "deep" #Don't modify
-    data["points"] = db.get_pointval(data["work_type"])
     data['logged_at'] = now()
     data = validate_form_data(data) 
     if data != False:
+        data["points"] = calculate_pointval(data)
         db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, points, label, notes) VALUES (?, ?, ?, ?, ?, ?, ?)", (data["work_type"], data['minutes'], data['seconds'], data['logged_at'], data['points'], data['label'], data['notes']))
+        # TODO:
+        #  db.update_state(data)
         db.get().commit()
         # TODO: Tell user that the log operation was successful
     # else: 
