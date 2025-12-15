@@ -34,10 +34,13 @@ def now():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
 def calculate_pointval(data=dict):
-    pointval = db.get_pointval(data["work_type"])
-    points = 0
-    points += int(data["minutes"]) * pointval
-    points += Decimal(data["seconds"])/60 * pointval
-    return int(db.to_scaled(points))
+    if data["work_type"] == 'tdl':
+        return db.query("SELECT tdl_value FROM state", one=True)["tdl_value"]
+    else:
+        pointval = db.get_pointval(data["work_type"])
+        points = 0
+        points += int(data["minutes"]) * pointval
+        points += Decimal(data["seconds"])/60 * pointval
+        return int(db.to_scaled(points))
 
 
