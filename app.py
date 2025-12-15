@@ -30,6 +30,12 @@ def init_db_command():
     db.init()
     print("Database initialized.")
 
+@app.cli.command("reset-state")
+def reset_state_command():
+    db.reset_state()
+    print("State has been reset.")
+    
+
 # ===== AUTO-REFRESH CONFIG (START - REMOVE THIS SECTION) =====
 # app.config['TEMPLATES_AUTO_RELOAD'] = True
 # app.config['ENV'] = 'development'
@@ -51,8 +57,7 @@ def add_shallow():
     if data != False:
         data["points"] = calculate_pointval(data) #TODO: calc function
         db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, points, label, notes) VALUES (?, ?, ?, ?, ?, ?, ?)", (data["work_type"], data['minutes'], data['seconds'], data['logged_at'], data['points'], data['label'], data['notes']))
-        # TODO:
-        # db.update_state(data)
+        db.update_state(data)
         db.get().commit()
         # TODO: Tell user that the log operation was successful
     # else: 
@@ -69,8 +74,7 @@ def add_deep():
     if data != False:
         data["points"] = calculate_pointval(data)
         db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, points, label, notes) VALUES (?, ?, ?, ?, ?, ?, ?)", (data["work_type"], data['minutes'], data['seconds'], data['logged_at'], data['points'], data['label'], data['notes']))
-        # TODO:
-        #  db.update_state(data)
+        db.update_state(data)
         db.get().commit()
         # TODO: Tell user that the log operation was successful
     # else: 
