@@ -21,7 +21,7 @@ CREATE TABLE state (
 
 CREATE TABLE logs (
     id INTEGER PRIMARY KEY,
-    work_type TEXT CHECK(work_type IN('deep','shallow')),
+    work_type TEXT CHECK(work_type IN('deep','shallow', 'tdl')),
     minutes INTEGER,
     seconds INTEGER,
     logged_at TEXT DEFAULT(datetime('now')),
