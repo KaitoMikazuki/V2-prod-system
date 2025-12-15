@@ -4,7 +4,7 @@ import db
 from decimal import Decimal
 
 def validate_form_data(data=dict):
-    # TODO: Handle cases where the user removes sections using Devtools, leading to a KeyError
+    # TODO: Handle cases where the user removes sections using Devtools, 
     if not isinstance(data, dict):
         return TypeError
 
@@ -20,11 +20,11 @@ def validate_form_data(data=dict):
         seconds = int(data['seconds'])
     except ValueError:
         return False
-    if minutes < 1:
+    if minutes < 0 or seconds < 0:
         return False
-    if seconds < 0: 
+    if minutes == 0 and seconds == 0:
         return False
-    
+
     if data['notes'] != None and len(data['notes']) > 400:
         return False
     
