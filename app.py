@@ -48,14 +48,13 @@ def index():
 
 @app.route("/shallow", methods=['POST'])
 def add_shallow():
-    # TODO(PURCHASE&SETTINGS): Interact with state properly
     data = request.form.to_dict()
-    data["work_type"] = "shallow" #Don't modify
+    data["work_type"] = "shallow" 
     data['logged_at'] = now()
     data = validate_form_data(data) 
     
     if data != False:
-        data["points"] = calculate_pointval(data) #TODO: calc function
+        data["points"] = calculate_pointval(data) 
         db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, points, label, notes) VALUES (?, ?, ?, ?, ?, ?, ?)", (data["work_type"], data['minutes'], data['seconds'], data['logged_at'], data['points'], data['label'], data['notes']))
         db.update_state(data)
         db.get().commit()
@@ -66,7 +65,6 @@ def add_shallow():
 
 @app.route("/deep", methods=["POST"])
 def add_deep():
-    # TODO(PURCHASE&SETTINGS): Interact with state properly
     data = request.form.to_dict()
     data["work_type"] = "deep" #Don't modify
     data['logged_at'] = now()
@@ -84,7 +82,7 @@ def add_deep():
 
 @app.route("/tdl", methods=["POST"])
 def add_tdl():
-    # TODO: TDL logic
+    # TODO: Integrate the dynamic totals computation 
     data = {
         "work_type": "tdl",
         "logged_at": now(),
