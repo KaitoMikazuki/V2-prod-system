@@ -82,14 +82,19 @@ def add_deep():
     return redirect("/")
 
 
-@app.route("/tdl")
+@app.route("/tdl", methods=["POST"])
 def add_tdl():
-    # TODO: This involves JS to log the tdl 
+    # TODO: TDL logic
+    data = {
+        "work_type": "tdl",
+        "logged_at": now(),
+    }
+    data["points"] = calculate_pointval(data)
+    db.query("INSERT INTO logs (work_type, logged_at, points) VALUES (?, ?, ?)", (data["work_type"], data["logged_at"], data["points"]))
+    db.update_state(data)
+    db.get().commit()
     return ""
 
-@app.route("/fetch_labels")
-def fetch_labels():
-    return ""
 
 @app.route("/statistics")
 def function ():
@@ -107,6 +112,12 @@ def function3 ():
 def function4 ():
     return ""
 
+
+# API REQUESTS
+@app.route("/pass_totaltdl", methods=["GET"])
+def pass_totaltdl():
+    total_tdl = db.query("SELECT total_tdl FROM state")[0]["total_tdl"]
+    return {"total_tdl": total_tdl}
 
 # # ============================================================
 # # AUTO-REFRESH BROWSER - DELETE THIS ENTIRE SECTION BLOCK
