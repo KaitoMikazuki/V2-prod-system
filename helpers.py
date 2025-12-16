@@ -34,13 +34,13 @@ def now():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
 def calculate_pointval(data=dict):
-    if data["work_type"] == 'tdl':
+    if data["work_type"] == 'tdl': # pyright: ignore[reportUndefinedVariable]
         return db.query("SELECT tdl_value FROM state", one=True)["tdl_value"]
     else:
-        pointval = db.get_pointval(data["work_type"])
+        pointval = db.get_pointval(data["work_type"])  # pyright: ignore[reportUndefinedVariable]
         points = 0
-        points += int(data["minutes"]) * pointval
-        points += Decimal(data["seconds"])/60 * pointval
+        points += int(data["minutes"]) * pointval # pyright: ignore[reportUndefinedVariable]
+        points += Decimal(data["seconds"])/60 * pointval # pyright: ignore[reportUndefinedVariable]
         return int(db.to_scaled(points))
 
 
