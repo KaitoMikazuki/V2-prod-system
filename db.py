@@ -38,6 +38,9 @@ def to_decimal(scaled: int):
 def to_scaled(value: Decimal) -> int:
     return int(Decimal(value) * 100)
 
+def secs_to_mins(seconds):
+    return Decimal(seconds)/60 
+
 def get_pointval(work_type):
     pointvals = query("SELECT deep_value, shallow_value, tdl_value FROM state", one=True)
     match work_type:

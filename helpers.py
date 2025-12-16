@@ -40,7 +40,7 @@ def calculate_pointval(data=dict):
         pointval = db.get_pointval(data["work_type"])  # pyright: ignore[reportUndefinedVariable]
         points = 0
         points += int(data["minutes"]) * pointval # pyright: ignore[reportUndefinedVariable]
-        points += Decimal(data["seconds"])/60 * pointval # pyright: ignore[reportUndefinedVariable]
+        points += db.secs_to_mins(data["seconds"]) * pointval # pyright: ignore[reportUndefinedVariable]
         return int(db.to_scaled(points))
 
 
