@@ -53,18 +53,9 @@ def get_pointval(work_type):
     return KeyError
 
 def update_state(data):
+    # TODO: Handle the case where the user wants to change task values
     add_points = data["points"]
-    if (data["work_type"] == 'tdl'):
-        query("UPDATE state SET total_tdl = total_tdl + ?, current_points = current_points + ?, total_points = total_points + ?", (100, add_points, add_points))
-        return
-    add_minutes = to_scaled(int(data["minutes"]) + Decimal(data["seconds"])/60) #converts seconds to minute format, then adds
-    match data["work_type"]: # Only differs in first column
-        case "shallow":
-            query("UPDATE state SET total_shallow = total_shallow + ?,current_points = current_points + ?, total_points = total_points + ?", (add_minutes, add_points, add_points))
-        case "deep":
-            query("UPDATE state SET total_deep = total_deep + ?, current_points = current_points + ?, total_points = total_points + ?", (add_minutes, add_points, add_points))
-
-    
+    query("UPDATE state SET current_points = current_points + ?", (add_points))
 
 def reset_state():
     query("DELETE FROM state;")

@@ -10,10 +10,6 @@ DROP TABLE IF EXISTS purchases;
 
 CREATE TABLE state (
     current_points INTEGER DEFAULT 0, -- decimal
-    total_points INTEGER DEFAULT 0, -- decimal
-    total_deep INTEGER DEFAULT 0, -- decimal
-    total_tdl INTEGER DEFAULT 0, -- decimal
-    total_shallow INTEGER DEFAULT 0, -- decimal
     deep_value INTEGER DEFAULT 200, -- decimal
     shallow_value INTEGER DEFAULT 100, -- decimal
     tdl_value INTEGER DEFAULT 400 -- decimal

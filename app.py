@@ -156,7 +156,7 @@ def function4 ():
 # API REQUESTS
 @app.route("/pass_totaltdl", methods=["GET"])
 def pass_totaltdl():
-    total_tdl = db.query("SELECT total_tdl FROM state")[0]["total_tdl"]
+    total_tdl = 100
     return {"total_tdl": total_tdl}
 
 # # ============================================================
