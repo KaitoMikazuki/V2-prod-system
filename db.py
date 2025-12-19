@@ -55,7 +55,7 @@ def get_pointval(work_type):
 def update_state(data):
     # TODO: Handle the case where the user wants to change task values
     add_points = data["points"]
-    query("UPDATE state SET current_points = current_points + ?", (add_points))
+    query("UPDATE state SET current_points = current_points + ?", (add_points,))
 
 def reset_state():
     query("DELETE FROM state;")
