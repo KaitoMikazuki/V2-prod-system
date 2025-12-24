@@ -1,6 +1,7 @@
 from flask import current_app, g
 import sqlite3
 from decimal import Decimal
+from models import Filters
 
 personal_db = './productivity.db'
 debug_db = './debug.db'
@@ -38,7 +39,7 @@ def to_decimal(scaled: int):
 def to_scaled(value: Decimal) -> int:
     return int(Decimal(value) * 100)
 
-def secs_to_mins(seconds):
+def secs_to_mins(seconds) -> Decimal:
     return Decimal(seconds)/60 
 
 def get_pointval(work_type):
@@ -61,3 +62,65 @@ def reset_state():
     query("DELETE FROM state;")
     query("INSERT INTO state DEFAULT VALUES;")
     get().commit()
+
+
+def handle_datarequest(request_type, filters:Filters):
+    match request_type:
+        case "calculate_points":
+            build_query(filters)
+            #TODO: 
+        # TODO: case "view_logs":
+            
+       # TODO: case "statistics"
+    return ""
+
+# Builds the query with 2 internal helper functions
+def build_query(filters: Filters) -> str: 
+    args = []
+    def build_typeconditions(column_name): # For work_type and label conditions
+        conditions = getattr(filters, column_name)
+
+        if conditions == (): # () means any value, if so, omit the condition
+            return ""
+        if conditions == (None,):   # (None,) means the user explicitly searches Null 
+            return f"{column_name} IS NULL "
+    
+        # Dynamically identifies conditions
+        search_null = False
+        placeholders = []
+        for i in conditions:
+            if i is None:
+                search_null = True
+                continue
+            placeholders.append("?")
+            args.append(i)
+        querycondition = f"{column_name} IN ({', '.join(placeholders)}) "
+        if search_null is True:
+            querycondition += f"OR {column_name} IS NULL "
+
+        return querycondition
+
+    # For start_date and end_date conditions
+    def build_dateconditions(start_date, end_date):
+        conditions = []
+
+        if start_date:
+            conditions.append("logged_at >= ? ")
+            args.append(start_date)
+        if end_date:
+            conditions.append("logged_at <= ?")
+            args.append(end_date)
+     
+        return "AND ".join(conditions)
+
+    conditions = [build_typeconditions("work_type"), build_typeconditions("label"),build_dateconditions(filters.start_date, filters.end_date)]
+
+    where_clause = []
+    for i in conditions: 
+        if i:
+            where_clause.append(i)
+
+    where_clause = "AND ".join(where_clause)
+
+    querycondition = (f"SELECT * FROM logs WHERE {where_clause}", args )
+    return querycondition
