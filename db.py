@@ -79,6 +79,8 @@ def handle_datarequest(request_type, filters:Filters):
             data = query(statement[0], statement[1])
             total_minutes = 0
             for row in data:
+                if not row["work_type"] in ('shallow', 'deep'):
+                    continue
                 total_minutes += row["minutes"]
                 total_minutes += secs_to_mins(row["seconds"])
             return total_minutes
