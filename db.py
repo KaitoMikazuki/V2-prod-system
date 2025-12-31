@@ -122,5 +122,5 @@ def build_query(filters: Filters) -> str:
 
     where_clause = "AND ".join(where_clause)
 
-    querycondition = (f"SELECT * FROM logs WHERE {where_clause}", args )
-    return querycondition
+    querystatement = (f"SELECT * FROM logs WHERE {where_clause}", args )
+    return querystatement

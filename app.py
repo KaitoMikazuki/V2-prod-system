@@ -8,6 +8,9 @@
 # Safari linear gradient body bg
 # Dynamic sizing for the navbar and index
 
+# TODO:
+# Manual deduct - User should determine whether it would deduct from tdl deep or shallow or adjusting or None, We'll do this using negative values, label of adjusting_entry
+
 from flask import Flask, redirect, render_template, request, jsonify, g
 from datetime import datetime
 from helpers import validate_form_data, now, calculate_pointval
