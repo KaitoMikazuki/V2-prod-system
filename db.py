@@ -63,60 +63,53 @@ def reset_state():
     query("INSERT INTO state DEFAULT VALUES;")
     get().commit()
 
+def calculate_points(conditions:Filters):
+    data = build_and_execute_query(conditions)
+    total_points = 0
+    for row in data:
+        total_points += int(row["points"])
+    return to_decimal(total_points)
 
-def handle_datarequest(request_type, filters:Filters):
-    match request_type:
-        case "calculate_points":
-            statement = build_query(filters)
-            data = query(statement[0], statement[1])
-            total_points = 0
-            for row in data:
-                total_points += int(row["points"])
-            return to_decimal(total_points)
-                
-        case "calculate_time":
-            statement = build_query(filters)
-            data = query(statement[0], statement[1])
-            total_minutes = 0
-            for row in data:
-                if not row["work_type"] in ('shallow', 'deep'):
-                    continue
-                total_minutes += row["minutes"]
-                total_minutes += secs_to_mins(row["seconds"])
-            return total_minutes
-        
-        case "calculate_total_tdl":
-            statement = build_query(filters)
-            data = query(statement[0], statement[1])
-            total_tdl = 0
-            # TODO: What is the return type of data? len() is o(1) only for list tuples and strs because they are internally stored 
-            for _ in data:
-                total_tdl += 1
-            return total_tdl
-            
-        case "view_logs":
-            # TODO:
-            return ""
-        
-        case "statistics":
-            # TODO:
-            return ""
+def calculate_time(conditions:Filters) -> int | Decimal :
+    data = build_and_execute_query(conditions)
+    total_minutes = 0
+    for row in data:
+        if not row["work_type"] in ('shallow', 'deep'):
+            continue
+        total_minutes += row["minutes"]
+        total_minutes += secs_to_mins(row["seconds"])
+    return total_minutes
 
-# Builds the query with 2 internal helper functions, returns a tuple with the query and the args
-def build_query(filters: Filters) -> tuple: 
+def calculate_total_tdl(conditions: Filters):
+    data = build_and_execute_query(conditions)
+    print(data[0])
+    total_tdl = 0
+    for _ in range(len(data)):
+        total_tdl += 1
+    return total_tdl
+
+# TODO:
+def view_logs(conditions:Filters):
+    return ""
+
+# TODO:
+def statistics(conditions:Filters):
+    return ""
+
+# Builds the query with 2 internal helper functions, 
+def build_and_execute_query(conditions: Filters) -> tuple: 
     args = []
-    def build_typeconditions(column_name): # For work_type and label conditions
-        conditions = getattr(filters, column_name)
 
-        if conditions == (): # () means any value, if so, omit the condition
+    # For work_type and label conditions
+    def build_typecondition(column_name): 
+        condition = getattr(conditions, column_name)
+        if condition == (): # () means any value, if so, omit the condition
             return ""
-        if conditions == (None,):   # (None,) means the user explicitly searches Null 
+        if condition == (None,):   # (None,) means the user explicitly searches Null 
             return f"{column_name} IS NULL "
-    
-        # Dynamically identifies conditions
         search_null = False
         placeholders = []
-        for i in conditions:
+        for i in condition:
             if i is None:
                 search_null = True
                 continue
@@ -125,23 +118,21 @@ def build_query(filters: Filters) -> tuple:
         querycondition = f"{column_name} IN ({', '.join(placeholders)}) "
         if search_null is True:
             querycondition += f"OR {column_name} IS NULL "
-
         return querycondition
 
     # For start_date and end_date conditions
     def build_dateconditions(start_date, end_date):
         conditions = []
-
         if start_date:
             conditions.append("logged_at >= ? ")
             args.append(start_date)
         if end_date:
             conditions.append("logged_at <= ?")
             args.append(end_date)
-     
         return "AND ".join(conditions)
 
-    conditions = [build_typeconditions("work_type"), build_typeconditions("label"),build_dateconditions(filters.start_date, filters.end_date)]
+
+    conditions = [build_typecondition("work_type"), build_typecondition("label"),build_dateconditions(conditions.start_date, conditions.end_date)]
 
     where_clause = []
     for i in conditions: 
@@ -150,5 +141,5 @@ def build_query(filters: Filters) -> tuple:
 
     where_clause = "AND ".join(where_clause)
 
-    querystatement = (f"SELECT * FROM logs WHERE {where_clause}", args )
-    return querystatement
+    data = query(f"SELECT * FROM logs WHERE {where_clause}", args)
+    return data

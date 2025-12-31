@@ -119,9 +119,8 @@ def function4 ():
 # API REQUESTS
 @app.route("/pass_totaltdl", methods=["GET"])
 def pass_totaltdl():
-    conditions = Filters(work_type=('tdl',))
-    total_tdl = db.handle_datarequest("calculate_total_tdl", conditions)
-    print(total_tdl)
+    conditions = Filters(work_type=('tdl',)) 
+    total_tdl = db.calculate_total_tdl(conditions)
     return {"total_tdl": total_tdl}
 
 # # ============================================================
