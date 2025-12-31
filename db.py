@@ -84,6 +84,15 @@ def handle_datarequest(request_type, filters:Filters):
                 total_minutes += row["minutes"]
                 total_minutes += secs_to_mins(row["seconds"])
             return total_minutes
+        
+        case "calculate_total_tdl":
+            statement = build_query(filters)
+            data = query(statement[0], statement[1])
+            total_tdl = 0
+            # TODO: What is the return type of data? len() is o(1) only for list tuples and strs because they are internally stored 
+            for _ in data:
+                total_tdl += 1
+            return total_tdl
             
         case "view_logs":
             # TODO:
