@@ -67,15 +67,32 @@ def reset_state():
 def handle_datarequest(request_type, filters:Filters):
     match request_type:
         case "calculate_points":
-            build_query(filters)
-            #TODO: 
-        # TODO: case "view_logs":
+            statement = build_query(filters)
+            data = query(statement[0], statement[1])
+            total_points = 0
+            for row in data:
+                total_points += int(row["points"])
+            return to_decimal(total_points)
+                
+        case "calculate_time":
+            statement = build_query(filters)
+            data = query(statement[0], statement[1])
+            total_minutes = 0
+            for row in data:
+                total_minutes += row["minutes"]
+                total_minutes += secs_to_mins(row["seconds"])
+            return total_minutes
             
-       # TODO: case "statistics"
-    return ""
+        case "view_logs":
+            # TODO:
+            return ""
+        
+        case "statistics":
+            # TODO:
+            return ""
 
-# Builds the query with 2 internal helper functions
-def build_query(filters: Filters) -> str: 
+# Builds the query with 2 internal helper functions, returns a tuple with the query and the args
+def build_query(filters: Filters) -> tuple: 
     args = []
     def build_typeconditions(column_name): # For work_type and label conditions
         conditions = getattr(filters, column_name)
