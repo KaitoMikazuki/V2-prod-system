@@ -64,14 +64,14 @@ def reset_state():
     get().commit()
 
 def calculate_points(conditions:Filters):
-    data = build_and_execute_query(conditions)
+    data = build_query(conditions, execute=True)
     total_points = 0
     for row in data:
         total_points += int(row["points"])
     return to_decimal(total_points)
 
 def calculate_time(conditions:Filters) -> int | Decimal :
-    data = build_and_execute_query(conditions)
+    data = build_query(conditions, execute=True)
     total_minutes = 0
     for row in data:
         if not row["work_type"] in ('shallow', 'deep'):
@@ -81,7 +81,7 @@ def calculate_time(conditions:Filters) -> int | Decimal :
     return total_minutes
 
 def calculate_total_tdl(conditions: Filters):
-    data = build_and_execute_query(conditions)
+    data = build_query(conditions, execute=True)
     print(data[0])
     total_tdl = 0
     for _ in range(len(data)):
@@ -97,7 +97,7 @@ def statistics(conditions:Filters):
     return ""
 
 # Builds the query with 2 internal helper functions, 
-def build_and_execute_query(conditions: Filters) -> tuple: 
+def build_query(conditions: Filters, execute=False) -> tuple: 
     args = []
 
     # For work_type and label conditions
@@ -141,5 +141,13 @@ def build_and_execute_query(conditions: Filters) -> tuple:
 
     where_clause = "AND ".join(where_clause)
 
-    data = query(f"SELECT {conditions.datacolumn} FROM logs WHERE {where_clause}", args)
-    return data
+    if execute:
+        data = query(f"SELECT {conditions.datacolumn} FROM logs WHERE {where_clause}", args)
+        return data
+    else:
+        sql_query = {
+            "sql":f"SELECT {conditions.datacolumn} FROM logs WHERE {where_clause}",
+            "args": args,
+        }
+        return sql_query
+
