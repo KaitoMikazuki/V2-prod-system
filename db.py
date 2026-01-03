@@ -132,14 +132,14 @@ def build_and_execute_query(conditions: Filters) -> tuple:
         return "AND ".join(conditions)
 
 
-    conditions = [build_typecondition("work_type"), build_typecondition("label"),build_dateconditions(conditions.start_date, conditions.end_date)]
+    filters = [build_typecondition("work_type"), build_typecondition("label"),build_dateconditions(conditions.start_date, conditions.end_date)]
 
     where_clause = []
-    for i in conditions: 
+    for i in filters: 
         if i:
             where_clause.append(i)
 
     where_clause = "AND ".join(where_clause)
 
-    data = query(f"SELECT * FROM logs WHERE {where_clause}", args)
+    data = query(f"SELECT {conditions.datacolumn} FROM logs WHERE {where_clause}", args)
     return data
