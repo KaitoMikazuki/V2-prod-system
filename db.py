@@ -97,7 +97,7 @@ def statistics(conditions:Filters):
     return ""
 
 # Builds the query with 2 internal helper functions, 
-def build_query(conditions: Filters, execute=False) -> tuple: 
+def build_query(conditions: Filters, execute=False) -> dict: 
     args = []
 
     # For work_type and label conditions
@@ -146,7 +146,8 @@ def build_query(conditions: Filters, execute=False) -> tuple:
         return data
     else:
         sql_query = {
-            "sql":f"SELECT {conditions.datacolumn} FROM logs WHERE {where_clause}",
+            "sql":f"SELECT {conditions.datacolumn} FROM logs",
+            "where_clause": f"WHERE {where_clause}",
             "args": args,
         }
         return sql_query
