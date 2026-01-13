@@ -8,11 +8,14 @@ DROP TABLE IF EXISTS labels;
 DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS purchases;
 
+-- TODO: minute should be based on the state table's 
 CREATE TABLE state (
     current_points INTEGER DEFAULT 0, -- decimal
     deep_value INTEGER DEFAULT 200, -- decimal
     shallow_value INTEGER DEFAULT 100, -- decimal
-    tdl_value INTEGER DEFAULT 400 -- decimal
+    tdl_value INTEGER DEFAULT 400, -- decimal ;  tdl_value should be around 2 mins of deep focus
+    period_start TEXT DEFAULT "MF",
+    period_end TEXT
 );
 
 CREATE TABLE logs (
