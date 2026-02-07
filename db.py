@@ -5,7 +5,7 @@ from models import Filters
 
 personal_db = './productivity.db'
 debug_db = './debug.db'
-DATABASE = debug_db
+DATABASE = personal_db
 
 def get():
     db = getattr(g, '_database', None)
@@ -100,39 +100,8 @@ def statistics(conditions:Filters):
 def build_query(conditions: Filters, execute=False) -> dict: 
     args = []
 
-    # For work_type and label conditions
-    def build_typecondition(column_name): 
-        condition = getattr(conditions, column_name)
-        if condition == (): # () means any value, if so, omit the condition
-            return ""
-        if condition == (None,):   # (None,) means the user explicitly searches Null 
-            return f"{column_name} IS NULL "
-        search_null = False
-        placeholders = []
-        for i in condition:
-            if i is None:
-                search_null = True
-                continue
-            placeholders.append("?")
-            args.append(i)
-        querycondition = f"{column_name} IN ({', '.join(placeholders)}) "
-        if search_null is True:
-            querycondition += f"OR {column_name} IS NULL "
-        return querycondition
-
-    # For start_date and end_date conditions
-    def build_dateconditions(start_date, end_date):
-        conditions = []
-        if start_date:
-            conditions.append("logged_at >= ? ")
-            args.append(start_date)
-        if end_date:
-            conditions.append("logged_at <= ?")
-            args.append(end_date)
-        return "AND ".join(conditions)
-
-
-    filters = [build_typecondition("work_type"), build_typecondition("label"),build_dateconditions(conditions.start_date, conditions.end_date)]
+    filters = [build_typecondition("work_type", args, conditions), build_typecondition("label", args, conditions),
+    build_dateconditions(conditions.start_date, conditions.end_date,args)]
 
     where_clause = []
     for i in filters: 
@@ -152,3 +121,33 @@ def build_query(conditions: Filters, execute=False) -> dict:
         }
         return sql_query
 
+# for work_type and label conditions in the where_clause
+def build_typecondition(column_name, args:list, conditions: Filters): 
+    condition = getattr(conditions, column_name)
+    if condition == (): # () means any value, if so, omit the condition
+        return ""
+    if condition == (None,):   # (None,) means the user explicitly searches Null 
+        return f"{column_name} IS NULL "
+    search_null = False
+    placeholders = []
+    for i in condition:
+        if i is None:
+            search_null = True
+            continue
+        placeholders.append("?")
+        args.append(i)
+    querycondition = f"{column_name} IN ({', '.join(placeholders)}) "
+    if search_null is True:
+        querycondition += f"OR {column_name} IS NULL "
+    return querycondition
+
+# For start_date and end_date conditions in the where clause
+def build_dateconditions(start_date, end_date, args:list):
+    conditions = []
+    if start_date:
+        conditions.append("logged_at >= ? ")
+        args.append(start_date)
+    if end_date:
+        conditions.append("logged_at <= ?")
+        args.append(end_date)
+    return "AND ".join(conditions)
