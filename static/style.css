@@ -56,7 +56,7 @@ body{
     font-size: 1.5rem;
     position: sticky;
     font-family: "Helvetica";
-    margin-bottom: 64px;
+    margin-bottom: 32px;
 }
 
 .header-nav>ul:nth-child(1) {
@@ -84,15 +84,15 @@ body{
 }
 
 .index-main{
+    margin-top: 64px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 64px;
     justify-items: center;
     align-items:center;
 }
 
 
-
+/* INDEX PAGE */
 .focus-form{
     width: min-content;
     display: grid;
@@ -160,7 +160,6 @@ body{
 
 
 
-
 .tdl-section{
     margin-top: 64px;
     width: 100%;
@@ -182,6 +181,40 @@ body{
     margin-top: 20px;
 }
 
+/* END OF INDEX PAGE */
+
+/* STATISTICS PAGE */ 
+/* THIS PART IS UNFINISHED */
+.stats{
+    display: grid;
+    justify-content:center;
+    gap:3vh;
+}
+
+#datefilter{
+    font-family: Helvetica;
+    font-weight: 900;
+    text-align: center;
+    font-family: "Helvetica";
+    font-size: 2.5rem;
+    grid-column: 1/ -1;
+}
+
+
+.graph{
+    grid-column: 1/-1;
+    justify-self: center;
+    width: 70vw;
+    min-height:400px;
+    height: 50vh;
+}
+
+.stats-actions{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+}
+/* END OF STATISTICS PAGE */
 
 /* utility classes */
 .u-hidden{
