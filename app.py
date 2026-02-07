@@ -3,6 +3,7 @@
 # Custom Task points
 # Disappear once it reaches the nav 
 # Log reasons for failing to log a focus session
+# Consider adding DAY to schema.sql of logs to know what day the user is most productive
 
 # Bugs:
 # Safari linear gradient body bg
@@ -11,6 +12,25 @@
 # TODO:
 # Manual deduct - User should determine whether it would deduct from tdl deep or shallow or adjusting or None, We'll do this using negative values, label of adjusting_entry
 
+# LABEL
+# Allow the user to type any label, they can edit naman in history
+# auto convert to lower case2
+
+# STATISTICS
+# Average points per day 
+# Average spending per day
+# Average mins per day
+# Average session length
+
+# Total points
+# Total spent 
+# Total tdl
+# Total mins
+# Percentage of deep work
+# Percentage of shallow work
+
+import pandas as pd
+import plotly.express as px
 from flask import Flask, redirect, render_template, request, jsonify, g
 from datetime import datetime
 from helpers import validate_form_data, now, calculate_pointval
@@ -49,6 +69,12 @@ def reset_state_command():
 
 @app.route("/")
 def index():
+    # Temporary debugger for build_query
+    # db.calculate_time(labada)
+    # ungod = db.build_query(labada)
+    # print(ungod[0])
+    # print(db.query(ungod[0],ungod[1]))
+
     return render_template("index.html")
 
 @app.route("/shallow", methods=['POST'])
@@ -93,7 +119,10 @@ def add_tdl():
         "logged_at": now(),
     }
     data["points"] = calculate_pointval(data)
-    db.query("INSERT INTO logs (work_type, logged_at, points) VALUES (?, ?, ?)", (data["work_type"], data["logged_at"], data["points"]))
+
+    # TODO: minutes should be based on the state table's minutes_per_task equivalent, then the minute per task should be multiplied to the deep_value: TASKID 1
+    MINUTES_PER_TASK = 2
+    db.query("INSERT INTO logs (work_type, minutes, logged_at, points) VALUES (?, ?, ?, ?)", (data["work_type"], MINUTES_PER_TASK, data["logged_at"], data["points"]))
     db.update_state(data)
     db.get().commit()
     return ""
@@ -101,7 +130,81 @@ def add_tdl():
 
 @app.route("/statistics")
 def function ():
-    return ""
+
+    # # TODO: There is an error if i do not provide a start_date
+    labada = Filters(work_type=(), label=(), start_date="2023-01-02")
+    debug = db.build_query(labada)
+
+    totals_query = f'''
+    SELECT
+        DATE(logged_at) AS day,
+        SUM(minutes) AS total_minutes,
+        SUM(seconds) AS total_seconds,
+        work_type,
+        label
+    FROM logs
+    {debug["where_clause"]}
+    GROUP BY DATE(logged_at), work_type
+    ORDER BY day;
+    '''
+
+    print(debug["where_clause"])
+    df = pd.read_sql(totals_query, db.get(), params = debug["args"])
+
+    fig = px.bar(df,
+                x="day",
+                 y = "total_minutes",
+                 color="work_type",
+                 barmode="stack", 
+                 labels = dict(day="Date", total_minutes="Total minutes", work_type="Work Type"),
+                 )
+
+    fig.update_layout(
+        bargap=0.4,
+        legend_title_text = "Work Type",
+        hovermode = "x unified"
+    )
+
+    fig.update_traces(
+        hovertemplate = "%{y} minutes"
+    )
+
+    plotly_chart = fig.to_html(full_html = False)
+
+
+
+
+
+    # df = pd.read_sql(totals_query, db.get(), params = debug["args"])
+    # fig = px.bar(
+    #     df,
+    #     x="day",
+    #     y="total_minutes",
+    #     color="work_type",
+    #     labels={
+    #         "work_type": "Work type",
+    #         "minutes": "Focus duration (mins)",
+    #         "logged_at": "Date",
+    #     },
+    
+    # )
+    # fig.update_layout(
+    #     barcornerradius = 15,
+    #     xaxis_tickangle=-0,
+    #     height=400,
+    #     hovermode = "x unified",
+    # )
+    # fig.update_traces(
+    #     hovertemplate = '%{y} minutes',
+    #     )
+
+
+    # plotly_chart = fig.to_html(
+    #     full_html=False,
+    #     include_plotlyjs="False",
+    #     div_id="graph"
+    # )
+    return render_template("statistics.html",plotly_chart=plotly_chart)
 
 @app.route("/history")
 def function2 ():
@@ -123,9 +226,9 @@ def pass_totaltdl():
     total_tdl = db.calculate_total_tdl(conditions)
     return {"total_tdl": total_tdl}
 
-# # ============================================================
-# # AUTO-REFRESH BROWSER - DELETE THIS ENTIRE SECTION BLOCK
-# # ============================================================
+# ============================================================
+# AUTO-REFRESH BROWSER - DELETE THIS ENTIRE SECTION BLOCK
+# ============================================================
 # @app.after_request
 # def add_live_reload(response):
 #     """Injects a live reload script into HTML responses in development mode"""
@@ -142,7 +245,7 @@ def pass_totaltdl():
 #                         }
 #                     })
 #                     .catch(e => {});
-#             }, 200000);
+#             }, 1000000);
 #         })();
 #         </script>
 #         """
@@ -152,9 +255,9 @@ def pass_totaltdl():
 #                 body = body.replace('</body>', live_reload_script + '</body>')
 #                 response.set_data(body)
 #     return response
-# # ============================================================
-# # END OF AUTO-REFRESH BROWSER SECTION
-# # ============================================================
+# ============================================================
+# END OF AUTO-REFRESH BROWSER SECTION
+# ============================================================
 
 
 if __name__ == '__main__':
