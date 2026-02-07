@@ -8,6 +8,3 @@ __pycache__/
 .env
 
 .DS_Store
-
-productivity.db
-debug.db
