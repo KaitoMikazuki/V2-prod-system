@@ -43,4 +43,6 @@ def calculate_pointval(data=dict):
         points += db.secs_to_mins(data["seconds"]) * pointval # pyright: ignore[reportUndefinedVariable]
         return int(db.to_scaled(points))
 
-
+def get_period_preference():
+     period_pref = db.query("SELECT period_start, period_end FROM state")
+     return period_pref
