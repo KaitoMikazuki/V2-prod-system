@@ -10,7 +10,6 @@ class Filters:
     start_date: Optional[str] = None
     end_date: Optional[str] = None
     datacolumn: str = "*" #Defaults to all columns in sql
-    # date filters are in a different format (non-tuple format)
 
     _VALID_WORK_TYPES = set(('tdl', 'deep', 'shallow', None))
     _VALID_LABELS = set((None,)) #TODO: extract the valid labels from SQL table: labels
