@@ -2,10 +2,11 @@ from dataclasses import dataclass
 from typing import Optional
 from datetime import datetime
 
+# NONE means that the condition will be omitted in the query statement
 @dataclass
 class Filters:
-    work_type: tuple[str, ...] = ('tdl', 'deep', 'shallow')
-    label: tuple[str, ...] = ()
+    work_type: tuple[str, ...] = ('tdl', 'deep', 'shallow') 
+    label: tuple[str, ...] = (None,)
     start_date: Optional[str] = None
     end_date: Optional[str] = None
     datacolumn: str = "*" #Defaults to all columns in sql
