@@ -184,7 +184,6 @@ body{
 /* END OF INDEX PAGE */
 
 /* STATISTICS PAGE */ 
-/* THIS PART IS UNFINISHED */
 .stats{
     display: grid;
     justify-content:center;
@@ -200,13 +199,12 @@ body{
     grid-column: 1/ -1;
 }
 
-
 .graph{
     grid-column: 1/-1;
     justify-self: center;
     width: 70vw;
     min-height:400px;
-    height: 50vh;
+    height: 100%;
 }
 
 .stats-actions{
