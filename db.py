@@ -116,7 +116,7 @@ def build_query(conditions: Filters, execute=False) -> dict:
     else:
         sql_query = {
             "sql":f"SELECT {conditions.datacolumn} FROM logs",
-            "where_clause": f"WHERE {where_clause}",
+            "where_clause": f"WHERE {where_clause}" if where_clause else "",
             "args": args,
         }
         return sql_query

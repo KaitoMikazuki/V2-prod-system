@@ -131,9 +131,9 @@ def add_tdl():
 @app.route("/statistics")
 def function ():
 
-    # # TODO: There is an error if i do not provide a start_date
-    labada = Filters(work_type=(), label=(), start_date="2023-01-02")
-    debug = db.build_query(labada)
+    # TODO: This will be acquired from dialog input
+    dialog_input = Filters() 
+    debug = db.build_query(dialog_input)
 
     totals_query = f'''
     SELECT
@@ -148,7 +148,6 @@ def function ():
     ORDER BY day;
     '''
 
-    print(debug["where_clause"])
     df = pd.read_sql(totals_query, db.get(), params = debug["args"])
 
     fig = px.bar(df,
