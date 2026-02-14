@@ -212,6 +212,110 @@ body{
     grid-template-columns: 1fr 1fr;
     justify-content: center;
 }
+
+.dialog{
+    border: none;
+    border-radius: 20px;
+    padding: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(560px, 92vw);
+    max-height: 90vh;
+    overflow: auto;
+    color: white;
+    background: linear-gradient(160deg, #2f2f2f 0%, #191919 75%);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+.dialog[open]{
+    animation: dialog-pop 0.2s ease-out;
+}
+
+.dialog::backdrop{
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(2px);
+}
+
+.dialog-form{
+    display: grid;
+    gap: 1.25rem;
+    padding: 2rem;
+}
+
+.dialog-header h3{
+    font-size: 1.8rem;
+    font-family: Helvetica;
+    margin-bottom: 0.25rem;
+}
+
+.dialog-header p{
+    color: #cfcfcf;
+}
+
+.dialog-fieldset{
+    border: 1px solid #3a3a3a;
+    border-radius: 16px;
+    padding: 1rem 1.25rem 1.25rem;
+    display: grid;
+    gap: 0.75rem;
+    background: rgba(10, 10, 10, 0.25);
+}
+
+.dialog-fieldset legend{
+    padding: 0 0.5rem;
+    font-family: Helvetica;
+    font-size: 1.1rem;
+}
+
+.dialog-check{
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1rem;
+}
+
+.dialog-label{
+    font-family: Helvetica;
+    font-size: 1.05rem;
+}
+
+.dialog-input{
+    color: white;
+    background: var(--secondary-c);
+    border: none;
+    border-radius: 10px;
+    padding: 0.65rem 0.9rem;
+    box-shadow: black 4px 4px 6px;
+    width: 100%;
+}
+
+.dialog-grid{
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.dialog-actions{
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.dialog-actions .primary-btn{
+    min-width: 120px;
+}
+
+@keyframes dialog-pop{
+    from{
+        transform: translateY(10px) scale(0.98);
+        opacity: 0;
+    }
+    to{
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
 /* END OF STATISTICS PAGE */
 
 /* utility classes */
