@@ -14,8 +14,8 @@ CREATE TABLE state (
     deep_value INTEGER DEFAULT 200, -- decimal
     shallow_value INTEGER DEFAULT 100, -- decimal
     tdl_value INTEGER DEFAULT 400, -- decimal ;  tdl_value should be around 2 mins of deep focus
-    period_start TEXT DEFAULT "MF",
-    period_end TEXT
+    period_start TEXT DEFAULT NULL,
+    period_end TEXT DEFAULT NULL,
 );
 
 CREATE TABLE logs (
