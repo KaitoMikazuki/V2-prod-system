@@ -73,14 +73,16 @@ body{
 
 .header-nav a{
     padding: 8px;
-    transition: font-size 1s; 
+    transition: transform 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
     color:lightgray;
     text-shadow: white 0 0 24px;
+    display: inline-block;
 }
 
 .header-nav a:hover{
-    transition: 1s;
-    font-size: 2rem;
+    transform: translateY(-1px) scale(1.04);
+    color: white;
+    text-shadow: white 0 0 18px;
 }
 
 .index-main{
@@ -227,9 +229,6 @@ body{
     color: white;
     background: linear-gradient(160deg, #2f2f2f 0%, #191919 75%);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
-}
-.dialog[open]{
-    animation: dialog-pop 0.2s ease-out;
 }
 
 .dialog::backdrop{
