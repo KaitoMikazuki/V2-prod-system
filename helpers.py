@@ -8,7 +8,7 @@ from decimal import Decimal
 def validate_form_data(data=dict):
     # TODO: Handle cases where the user removes sections using Devtools, 
     if not isinstance(data, dict):
-        return TypeError
+        raise TypeError
 
     # If user did not provide inputs, set default values
     data.setdefault("label", None)

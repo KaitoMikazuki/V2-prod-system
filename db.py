@@ -51,7 +51,7 @@ def get_pointval(work_type):
             return to_decimal(pointvals["deep_value"])
         case "tdl":
             return to_decimal(pointvals["tdl"])
-    return KeyError
+    raise KeyError
 
 def update_state(data):
     # TODO: Handle the case where the user wants to change task values
