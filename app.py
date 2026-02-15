@@ -29,10 +29,8 @@
 # Percentage of deep work
 # Percentage of shallow work
 
-import pandas as pd
-import plotly.express as px
+
 from flask import Flask, redirect, render_template, request, jsonify, g
-from datetime import datetime
 from helpers import validate_form_data, now, calculate_pointval, create_productivitygraph
 from models import Filters
 import db
@@ -69,12 +67,6 @@ def reset_state_command():
 
 @app.route("/")
 def index():
-    # Temporary debugger for build_query
-    # db.calculate_time(labada)
-    # ungod = db.build_query(labada)
-    # print(ungod[0])
-    # print(db.query(ungod[0],ungod[1]))
-
     return render_template("index.html")
 
 @app.route("/shallow", methods=['POST'])
