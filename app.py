@@ -33,7 +33,7 @@ import pandas as pd
 import plotly.express as px
 from flask import Flask, redirect, render_template, request, jsonify, g
 from datetime import datetime
-from helpers import validate_form_data, now, calculate_pointval
+from helpers import validate_form_data, now, calculate_pointval, create_productivitygraph
 from models import Filters
 import db
 
@@ -110,7 +110,6 @@ def add_deep():
         # TODO: RETURN ERROR - Warn user that input is wrong
     return redirect("/")
 
-
 @app.route("/tdl", methods=["POST"])
 def add_tdl():
     # TODO: Integrate the dynamic totals computation 
@@ -130,79 +129,11 @@ def add_tdl():
 
 @app.route("/statistics")
 def function ():
-
     # TODO: This will be acquired from dialog input
     dialog_input = Filters() 
-    debug = db.build_query(dialog_input)
+    query = db.build_query(dialog_input)
+    plotly_chart = create_productivitygraph(query)
 
-    totals_query = f'''
-    SELECT
-        DATE(logged_at) AS day,
-        SUM(minutes) AS total_minutes,
-        SUM(seconds) AS total_seconds,
-        work_type,
-        label
-    FROM logs
-    {debug["where_clause"]}
-    GROUP BY DATE(logged_at), work_type
-    ORDER BY day;
-    '''
-
-    df = pd.read_sql(totals_query, db.get(), params = debug["args"])
-
-    fig = px.bar(df,
-                x="day",
-                 y = "total_minutes",
-                 color="work_type",
-                 barmode="stack", 
-                 labels = dict(day="Date", total_minutes="Total minutes", work_type="Work Type"),
-                 )
-
-    fig.update_layout(
-        bargap=0.4,
-        legend_title_text = "Work Type",
-        hovermode = "x unified"
-    )
-
-    fig.update_traces(
-        hovertemplate = "%{y} minutes"
-    )
-
-    plotly_chart = fig.to_html(full_html = False)
-
-
-
-
-
-    # df = pd.read_sql(totals_query, db.get(), params = debug["args"])
-    # fig = px.bar(
-    #     df,
-    #     x="day",
-    #     y="total_minutes",
-    #     color="work_type",
-    #     labels={
-    #         "work_type": "Work type",
-    #         "minutes": "Focus duration (mins)",
-    #         "logged_at": "Date",
-    #     },
-    
-    # )
-    # fig.update_layout(
-    #     barcornerradius = 15,
-    #     xaxis_tickangle=-0,
-    #     height=400,
-    #     hovermode = "x unified",
-    # )
-    # fig.update_traces(
-    #     hovertemplate = '%{y} minutes',
-    #     )
-
-
-    # plotly_chart = fig.to_html(
-    #     full_html=False,
-    #     include_plotlyjs="False",
-    #     div_id="graph"
-    # )
     return render_template("statistics.html",plotly_chart=plotly_chart)
 
 @app.route("/history")

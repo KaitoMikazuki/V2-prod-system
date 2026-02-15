@@ -1,6 +1,8 @@
 from flask import request
 from datetime import datetime
 import db
+import plotly.express as px
+import pandas as pd
 from decimal import Decimal
 
 def validate_form_data(data=dict):
@@ -46,3 +48,40 @@ def calculate_pointval(data=dict):
 def get_period_preference():
      period_pref = db.query("SELECT period_start, period_end FROM state")
      return period_pref
+
+def create_productivitygraph(query):
+    totals_query = f'''
+    SELECT
+        DATE(logged_at) AS day,
+        SUM(minutes) AS total_minutes,
+        SUM(seconds) AS total_seconds,
+        work_type,
+        label
+    FROM logs
+    {query["where_clause"]}
+    GROUP BY DATE(logged_at), work_type
+    ORDER BY day;
+    '''
+
+    df = pd.read_sql(totals_query, db.get(), params = query["args"])
+
+    fig = px.bar(df,
+            x="day",
+                y = "total_minutes",
+                color="work_type",
+                barmode="stack", 
+                labels = dict(day="Date", total_minutes="Total minutes", work_type="Work Type"),
+                )
+
+    fig.update_layout(
+        bargap=0.4,
+        legend_title_text = "Work Type",
+        hovermode = "x unified"
+    )
+
+    fig.update_traces(
+        hovertemplate = "%{y} minutes"
+    )
+
+    plotly_chart = fig.to_html(full_html = False)
+    return plotly_chart
