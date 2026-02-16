@@ -88,14 +88,6 @@ def calculate_total_tdl(conditions: Filters):
         total_tdl += 1
     return total_tdl
 
-# TODO:
-def view_logs(conditions:Filters):
-    return ""
-
-# TODO:
-def statistics(conditions:Filters):
-    return ""
-
 # Builds the query with 2 internal helper functions, 
 def build_query(conditions: Filters, execute=False) -> dict: 
     args = []
