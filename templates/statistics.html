@@ -15,29 +15,13 @@
         <form method="dialog" class="dialog-form">
             <header class="dialog-header">
                 <h3>Filter statistics</h3>
-                <p>Select work types, add a label, and optionally limit dates.</p>
+                <p>Select label and time period.</p>
             </header>
-
-            <fieldset class="dialog-fieldset">
-                <legend>Work type</legend>
-                <label class="dialog-check">
-                    <input type="checkbox" name="work_type" value="deep">
-                    <span>Deep</span>
-                </label>
-                <label class="dialog-check">
-                    <input type="checkbox" name="work_type" value="shallow">
-                    <span>Shallow</span>
-                </label>
-                <label class="dialog-check">
-                    <input type="checkbox" name="work_type" value="tdl">
-                    <span>TDL</span>
-                </label>
-            </fieldset>
 
             <label class="dialog-label" for="filter-label">
                 Label (optional)
             </label>
-            <input id="filter-label" class="dialog-input" type="text" placeholder="E.g. sprint 12">
+            <input id="filter-label" class="dialog-input" type="text" placeholder="Feature is not available yet" disabled>
 
             <div class="dialog-grid">
                 <div>
@@ -51,7 +35,7 @@
             </div>
 
             <div class="dialog-actions">
-                <button class="primary-btn" type="submit" value="cancel">Cancel</button>
+                <button class="primary-btn" type="button">Cancel</button>
                 <button class="primary-btn" type="submit" value="apply">Apply</button>
             </div>
         </form>
