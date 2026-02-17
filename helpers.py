@@ -4,6 +4,7 @@ import db
 import plotly.express as px
 import pandas as pd
 from decimal import Decimal
+from models import Filters
 
 def validate_form_data(data=dict):
     # TODO: Handle cases where the user removes sections using Devtools, 
@@ -49,7 +50,7 @@ def get_period_preference():
      period_pref = db.query("SELECT period_start, period_end FROM state")
      return period_pref
 
-def create_productivitygraph(query):
+def create_productivitygraph(query:dict):
     totals_query = f'''
     SELECT
         DATE(logged_at) AS day,
@@ -85,3 +86,15 @@ def create_productivitygraph(query):
 
     plotly_chart = fig.to_html(full_html = False)
     return plotly_chart
+
+def prepare_dialoguery() -> dict:
+    filters = Filters()
+    state = db.query("SELECT period_start, period_end FROM state")[0]
+
+    if state["period_start"]:
+        filters.start_date = state["period_start"]
+    if state["period_end"]:
+        filters.end_date = state["period_end"]
+
+    query = db.build_query(filters)
+    return query

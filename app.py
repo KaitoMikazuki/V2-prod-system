@@ -31,7 +31,7 @@
 
 
 from flask import Flask, redirect, render_template, request, jsonify, g
-from helpers import validate_form_data, now, calculate_pointval, create_productivitygraph
+from helpers import validate_form_data, now, calculate_pointval, create_productivitygraph, prepare_dialoguery
 from models import Filters
 import db
 
@@ -120,12 +120,10 @@ def add_tdl():
 
 
 @app.route("/statistics")
-def function ():
+def statistics ():
     # TODO: This will be acquired from dialog input
-    dialog_input = Filters() 
-    query = db.build_query(dialog_input)
+    query = prepare_dialoguery()
     plotly_chart = create_productivitygraph(query)
-
     return render_template("statistics.html",plotly_chart=plotly_chart)
 
 @app.route("/history")
@@ -144,9 +142,19 @@ def function4 ():
 # API REQUESTS
 @app.route("/pass_totaltdl", methods=["GET"])
 def pass_totaltdl():
+    # TODO bug: label is coming out even if i have not specified in filters
     conditions = Filters(work_type=('tdl',)) 
     total_tdl = db.calculate_total_tdl(conditions)
     return {"total_tdl": total_tdl}
+
+
+@app.route("/update_statistics")
+def update_statistics():
+    # TODO: STATE MODIFICATION BASED ON USER'S DATE PREFERENCES
+
+    query = prepare_dialoguery()
+    plotly_chart = create_productivitygraph(query)
+    return ""
 
 # ============================================================
 # AUTO-REFRESH BROWSER - DELETE THIS ENTIRE SECTION BLOCK
