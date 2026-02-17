@@ -10,19 +10,39 @@
         <button class="primary-btn">View in Depth</button>
         <button class="primary-btn" id="add-filters">Add Filters</button>
     </div>
+    
+<dialog id="dialog" class="dialog">
+    <form method="dialog" class="dialog-form" id="dialogForm">
+        <header class="dialog-header">
+            <h3>Filter statistics</h3>
+            <p>Select work types, labels, and dates to focus on specific data</p>
+        </header>
 
-    <dialog id="dialog" class="dialog">
-        <form method="dialog" class="dialog-form">
-            <header class="dialog-header">
-                <h3>Filter statistics</h3>
-                <p>Select label and time period.</p>
-            </header>
+        <div class="dialog-section">
+            <label class="dialog-label">
+                Work Type 
+            </label>
+            <div class="dialog-checkbox-group">
+                <label class="dialog-checkbox-label">
+                    <input type="checkbox" name="work-type" value="deep"> Deep
+                </label>
+                <label class="dialog-checkbox-label">
+                    <input type="checkbox" name="work-type" value="shallow"> Shallow
+                </label>
+                <label class="dialog-checkbox-label">
+                    <input type="checkbox" name="work-type" value="tdl"> TDL
+                </label>
+            </div>
+        </div>
 
+        <div class="dialog-section">
             <label class="dialog-label" for="filter-label">
-                Label (optional)
+                Label
             </label>
             <input id="filter-label" class="dialog-input" type="text" placeholder="Feature is not available yet" disabled>
+        </div>
 
+        <div class="dialog-section">
             <div class="dialog-grid">
                 <div>
                     <label class="dialog-label" for="filter-start">Start date</label>
@@ -33,13 +53,14 @@
                     <input id="filter-end" class="dialog-input" type="date">
                 </div>
             </div>
+        </div>
 
-            <div class="dialog-actions">
-                <button class="primary-btn" type="button">Cancel</button>
-                <button class="primary-btn" type="submit" value="apply">Apply</button>
-            </div>
-        </form>
-    </dialog>
+        <div class="dialog-actions">
+            <button class="primary-btn" type="button" id="closeButton">Cancel</button>
+            <button class="primary-btn" type="submit" value="apply" id="applyButton">Apply</button>
+        </div>
+    </form>
+</dialog>
 </div>
 <script src="../static/statistics.js"></script>
 {% endblock %}
