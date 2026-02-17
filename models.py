@@ -5,8 +5,8 @@ from datetime import datetime
 # NONE means that the condition will be omitted in the query statement
 @dataclass
 class Filters:
-    work_type: tuple[str, ...] = ('tdl', 'deep', 'shallow') 
-    label: tuple[str, ...] = (None,)
+    work_type: tuple[str, ...] = () 
+    label: tuple[str, ...] = ()
     start_date: Optional[str] = None
     end_date: Optional[str] = None
     datacolumn: str = "*" #Defaults to all columns in sql
