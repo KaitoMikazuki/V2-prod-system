@@ -2,7 +2,6 @@ from flask import request
 from datetime import datetime
 import db
 import plotly.express as px
-import pandas as pd
 from decimal import Decimal
 from models import Filters
 
@@ -50,16 +49,14 @@ def get_period_preference():
      period_pref = db.query("SELECT period_start, period_end FROM state")
      return period_pref
 
-def create_productivitygraph(query:dict):
-    df = pd.read_sql(query["sql"], db.get(), params = query["args"])
-
+def create_productivitygraph(df):
     fig = px.bar(df,
-            x="day",
-                y = "total_minutes",
-                color="work_type",
-                barmode="stack", 
-                labels = dict(day="Date", total_minutes="Total minutes", work_type="Work Type"),
-                )
+        x="day",
+        y = "total_minutes",
+        color="work_type",
+        barmode="stack", 
+        labels = dict(day="Date", total_minutes="Total minutes", work_type="Work Type"),
+        )
 
     fig.update_layout(
         bargap=0.4,
@@ -70,9 +67,7 @@ def create_productivitygraph(query:dict):
     fig.update_traces(
         hovertemplate = "%{y} minutes"
     )
-
-    plotly_chart = fig.to_html(full_html = False)
-    return plotly_chart
+    return fig
 
 def build_dialogFormQuery(dialogInput=None) -> dict:
     filters = Filters()

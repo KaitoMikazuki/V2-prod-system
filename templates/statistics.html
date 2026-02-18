@@ -1,10 +1,13 @@
 {% extends "layout.html" %}
 {% block title %}View Statistics{% endblock %}
 {% block content %}
-<!-- Start and end date should be savedper -->
+<!-- Plotly Script --> 
+<script src="https://cdn.plot.ly/plotly-3.3.0.min.js" charset="utf-8"></script>
+
+
 <div class="stats">
     <p id="datefilter">January 1, 2019 - January 3, 2023</p>
-    <div class="graph" id="graph">{{ plotly_chart | safe}}</div>
+    <div class="graph" id="graph"></div>
     
     <div class="stats-actions">
         <button class="primary-btn">View in Depth</button>

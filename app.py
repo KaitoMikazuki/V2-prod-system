@@ -34,7 +34,7 @@ from flask import Flask, redirect, render_template, request, jsonify, g
 from helpers import validate_form_data, now, calculate_pointval, create_productivitygraph, build_dialogFormQuery
 from models import Filters
 import db
-
+import pandas as pd
             
 
 def create_app():
@@ -121,10 +121,17 @@ def add_tdl():
 
 @app.route("/statistics")
 def statistics ():
-    # TODO: This will be acquired from dialog input
+    return render_template("statistics.html")
+
+@app.route("/update_statistics")
+def update_statistics(dialog_input = None):
+    # TODO: STATE MODIFICATION BASED ON USER'S DATE PREFERENCES
+
     query = build_dialogFormQuery()
-    plotly_chart = create_productivitygraph(query)
-    return render_template("statistics.html",plotly_chart=plotly_chart)
+    df = pd.read_sql(query["sql"], db.get(), params = query["args"])
+    print(df)
+    fig = create_productivitygraph(df)
+    return fig.to_json()
 
 @app.route("/history")
 def function2 ():
@@ -147,15 +154,6 @@ def pass_totaltdl():
     return {"total_tdl": total_tdl}
 
 
-@app.route("/update_statistics")
-def update_statistics():
-    # TODO: STATE MODIFICATION BASED ON USER'S DATE PREFERENCES
-
-    query = build_dialogFormQuery()
-    # TODO: Extract the new set of x(logged_at summarized per day) y(sum of total_minutes) values for the graph
-
-    # TODO: Pass json data to js
-    return ""
 
 # ============================================================
 # AUTO-REFRESH BROWSER - DELETE THIS ENTIRE SECTION BLOCK
