@@ -51,20 +51,7 @@ def get_period_preference():
      return period_pref
 
 def create_productivitygraph(query:dict):
-    totals_query = f'''
-    SELECT
-        DATE(logged_at) AS day,
-        SUM(minutes) AS total_minutes,
-        SUM(seconds) AS total_seconds,
-        work_type,
-        label
-    FROM logs
-    {query["where_clause"]}
-    GROUP BY DATE(logged_at), work_type
-    ORDER BY day;
-    '''
-
-    df = pd.read_sql(totals_query, db.get(), params = query["args"])
+    df = pd.read_sql(query["sql"], db.get(), params = query["args"])
 
     fig = px.bar(df,
             x="day",
@@ -87,7 +74,7 @@ def create_productivitygraph(query:dict):
     plotly_chart = fig.to_html(full_html = False)
     return plotly_chart
 
-def prepare_dialoguery() -> dict:
+def build_dialogFormQuery(dialogInput=None) -> dict:
     filters = Filters()
     state = db.query("SELECT period_start, period_end FROM state")[0]
 
@@ -96,5 +83,20 @@ def prepare_dialoguery() -> dict:
     if state["period_end"]:
         filters.end_date = state["period_end"]
 
-    query = db.build_query(filters)
-    return query
+    query_parts = db.build_query(filters)
+    where_clause = query_parts["where_clause"]
+    args_clause = query_parts["args"]
+
+    dialogQuery = f'''
+    SELECT
+        DATE(logged_at) AS day,
+        SUM(minutes) AS total_minutes,
+        SUM(seconds) AS total_seconds,
+        work_type,
+        label
+    FROM logs
+    {where_clause}
+    GROUP BY DATE(logged_at), work_type
+    ORDER BY day;
+    '''
+    return {"sql":dialogQuery, "args": args_clause}
