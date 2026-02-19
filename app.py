@@ -59,11 +59,6 @@ def reset_state_command():
     print("State has been reset.")
     
 
-# ===== AUTO-REFRESH CONFIG (START - REMOVE THIS SECTION) =====
-# app.config['TEMPLATES_AUTO_RELOAD'] = True
-# app.config['ENV'] = 'development'
-# ===== AUTO-REFRESH CONFIG (END) =====
-
 
 @app.route("/")
 def index():
@@ -81,9 +76,9 @@ def add_shallow():
         db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, points, label, notes) VALUES (?, ?, ?, ?, ?, ?, ?)", (data["work_type"], data['minutes'], data['seconds'], data['logged_at'], data['points'], data['label'], data['notes']))
         db.update_state(data)
         db.get().commit()
-        # TODO: Tell user that the log operation was successful
+        # CONSIDER: Tell user that the log operation was successful
     # else: 
-        # TODO: RETURN ERROR - Warn user that input is wrong
+        # CONSIDER: RETURN ERROR - Warn user that input is wrong
     return redirect("/")
 
 @app.route("/deep", methods=["POST"])
@@ -97,14 +92,14 @@ def add_deep():
         db.query("INSERT INTO logs (work_type, minutes, seconds, logged_at, points, label, notes) VALUES (?, ?, ?, ?, ?, ?, ?)", (data["work_type"], data['minutes'], data['seconds'], data['logged_at'], data['points'], data['label'], data['notes']))
         db.update_state(data)
         db.get().commit()
-        # TODO: Tell user that the log operation was successful
+        # CONSIDER: Tell user that the log operation was successful
     # else: 
-        # TODO: RETURN ERROR - Warn user that input is wrong
+        # CONSIDER: RETURN ERROR - Warn user that input is wrong
     return redirect("/")
 
 @app.route("/tdl", methods=["POST"])
 def add_tdl():
-    # TODO: Integrate the dynamic totals computation 
+    # REVISIT: Integrate the dynamic totals computation 
     data = {
         "work_type": "tdl",
         "logged_at": now(),
@@ -134,15 +129,15 @@ def update_statistics(dialog_input = None):
     return fig.to_json()
 
 @app.route("/history")
-def function2 ():
+def history ():
     return ""
 
 @app.route("/purchase")
-def function3 ():
+def purchase ():
     return ""
 
 @app.route("/settings")
-def function4 ():
+def settings ():
     return ""
 
 
@@ -153,40 +148,6 @@ def pass_totaltdl():
     total_tdl = db.calculate_total_tdl(conditions)
     return {"total_tdl": total_tdl}
 
-
-
-# ============================================================
-# AUTO-REFRESH BROWSER - DELETE THIS ENTIRE SECTION BLOCK
-# ============================================================
-# @app.after_request
-# def add_live_reload(response):
-#     """Injects a live reload script into HTML responses in development mode"""
-#     if app.debug and response.content_type and 'text/html' in response.content_type:
-#         live_reload_script = """
-#         <script>
-#         (function() {
-#             setInterval(function() {
-#                 fetch(window.location.href)
-#                     .then(r => r.text())
-#                     .then(html => {
-#                         if (html !== document.documentElement.outerHTML) {
-#                             location.reload();
-#                         }
-#                     })
-#                     .catch(e => {});
-#             }, 1000000);
-#         })();
-#         </script>
-#         """
-#         if response.data:
-#             body = response.data.decode('utf-8')
-#             if '</body>' in body:
-#                 body = body.replace('</body>', live_reload_script + '</body>')
-#                 response.set_data(body)
-#     return response
-# ============================================================
-# END OF AUTO-REFRESH BROWSER SECTION
-# ============================================================
 
 
 if __name__ == '__main__':

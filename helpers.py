@@ -35,6 +35,7 @@ def validate_form_data(data=dict):
 def now():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
+# REVISIT: Check the safety of key indexing
 def calculate_pointval(data=dict):
     if data["work_type"] == 'tdl': # pyright: ignore[reportUndefinedVariable]
         return db.query("SELECT tdl_value FROM state", one=True)["tdl_value"]
