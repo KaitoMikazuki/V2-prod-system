@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS purchases;
 
 -- TODO: minute should be based on the state table's 
 CREATE TABLE state (
+    id INTEGER PRIMARY KEY,
     current_points INTEGER DEFAULT 0, -- decimal
     deep_value INTEGER DEFAULT 200, -- decimal
     shallow_value INTEGER DEFAULT 100, -- decimal
