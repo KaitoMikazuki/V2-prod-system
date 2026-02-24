@@ -2,6 +2,7 @@ from flask import current_app, g
 import sqlite3
 from decimal import Decimal
 from models import Filters
+from datetime import datetime
 
 personal_db = './productivity.db'
 debug_db = './debug.db'
@@ -87,6 +88,22 @@ def calculate_total_tdl(conditions: Filters):
     for _ in range(len(data)):
         total_tdl += 1
     return total_tdl
+
+def change_stateDates(period_start, period_end):
+    period_start = validate_datetime(period_start)
+    period_end = validate_datetime(period_end)
+    if period_start and period_end and period_start > period_end:
+        raise ValueError
+    # REVISIT: TELL THE USER WHY VALUE ERROR
+
+    print((period_start, period_end))
+    query("UPDATE state SET period_start = ?, period_end = ? where id=?", (period_start, period_end, 1))
+    get().commit()
+
+def validate_datetime(date):
+    if not date: 
+        return None
+    return datetime.fromisoformat(date)
 
 # Builds the query with 2 internal helper functions, 
 def build_query(conditions: Filters, execute=False) -> dict: 
