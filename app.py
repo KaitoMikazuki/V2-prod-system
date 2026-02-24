@@ -31,7 +31,7 @@
 
 
 from flask import Flask, redirect, render_template, request, jsonify, g
-from helpers import validate_form_data, now, calculate_pointval, create_productivitygraph, build_dialogFormQuery
+from helpers import validate_form_data, now, calculate_pointval, create_productivitygraph, build_dialogFormQuery, get_stateDates
 from models import Filters
 import db
 import pandas as pd
@@ -118,13 +118,19 @@ def add_tdl():
 def statistics ():
     return render_template("statistics.html")
 
-@app.route("/update_statistics")
-def update_statistics(dialog_input = None):
+@app.route("/update_statistics", methods = ["POST"])
+def update_statistics():
     # TODO: STATE MODIFICATION BASED ON USER'S DATE PREFERENCES
+    dialogFilters = Filters()
+    
+    data = request.get_json()
+    if data["on_load"] == False:
+        db.change_stateDates(data["period_start"], data["period_end"])
+        dialogFilters = Filters.from_dialogJson(Filters,data)    
+    dialogFilters.start_date, dialogFilters.end_date = get_stateDates() 
 
-    query = build_dialogFormQuery()
+    query = build_dialogFormQuery(dialogFilters)
     df = pd.read_sql(query["sql"], db.get(), params = query["args"])
-    print(df)
     fig = create_productivitygraph(df)
     return fig.to_json()
 

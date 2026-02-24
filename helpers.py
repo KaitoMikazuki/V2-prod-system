@@ -70,16 +70,8 @@ def create_productivitygraph(df):
     )
     return fig
 
-def build_dialogFormQuery(dialogInput=None) -> dict:
-    filters = Filters()
-    state = db.query("SELECT period_start, period_end FROM state")[0]
-
-    if state["period_start"]:
-        filters.start_date = state["period_start"]
-    if state["period_end"]:
-        filters.end_date = state["period_end"]
-
-    query_parts = db.build_query(filters)
+def build_dialogFormQuery(dialogFilters=None) -> dict:
+    query_parts = db.build_query(dialogFilters)
     where_clause = query_parts["where_clause"]
     args_clause = query_parts["args"]
 
@@ -96,3 +88,9 @@ def build_dialogFormQuery(dialogInput=None) -> dict:
     ORDER BY day;
     '''
     return {"sql":dialogQuery, "args": args_clause}
+
+def get_stateDates() -> tuple:
+    state = db.query("SELECT period_start, period_end FROM state")[0]
+    period_start = state["period_start"]
+    period_end = state["period_end"]
+    return (period_start, period_end)

@@ -43,3 +43,11 @@ class Filters:
                 datetime.fromisoformat(self.end_date)
             except ValueError:
                 raise ValueError("Invalid start_date")
+    
+    def from_dialogJson(cls, data: dict):
+        print(data)
+        return cls(
+            work_type=tuple(data["work_type"]),
+            label = (None,)
+            # REVISIT: Label n/a yet label=tuple(data["label"]),
+        )
